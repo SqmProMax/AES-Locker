@@ -88,131 +88,136 @@ input, textarea {
 }
 input:focus, textarea:focus {
     border-color: #667eea;
-    box-shadow: 0 0 0 4px 拆分后的同级文件（适配 jsDelivr CDN，无嵌套文件夹）
-## 1. HTML 文件（index.html）
-```html
-<!DOCTYPE html>
-<meta http-equiv="Cache-Control" content="public, max-age=31536000">
-<link rel="icon" type="image/png" sizes="64x64" href="https://cdn.jsdelivr.net/gh/SqmProMax/AES-Locker@main/favicon-64.png">
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ AES Locker</title>
-    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SqmProMax/AES-Locker@main/style.css">
-</head>
-<body>
-    <div class="container">
-        <div class="language-selector">
-            <select id="languageSelect" onchange="switchLanguage(this.value)">
-                <option value="zh-CN">简体中文 (中国大陆)</option>
-                <option value="zh-TW">繁體中文 (台灣)</option>
-                <option value="en-US">English (US)</option>
-                <option value="en-GB">English (UK)</option>
-                <option value="es">Español</option>
-                <option value="ru">Русский</option>
-                <option value="de">Deutsch</option>
-            </select>
-        </div>
-        <h1 data-i18n="title">✨ AES 加密解密工具</h1>
-        <div class="input-group">
-            <label data-i18n="inputContent">1. 待处理内容</label>
-            <div class="input-row">
-                <input type="text" id="plainText" placeholder="请输入需要加密/解密的内容..." data-i18n="inputContentPlaceholder">
-                <button class="btn-paste" onclick="pasteFromClipboard('plainText')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16L21 8V19C21 20.1046 20.1046 21 19 21Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M17 21V13H7V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M7 3V8H15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span data-i18n="paste">粘贴</span>
-                </button>
-            </div>
-        </div>
-        <div class="input-group">
-            <label data-i18n="roomCode">2. 房间码（自动生成，含密钥）</label>
-            <div class="input-row">
-                <input type="text" id="roomCode" readonly placeholder="点击生成独一无二的房间码" data-i18n="roomCodePlaceholder">
-                <button class="btn-generate" onclick="generateRoomCode()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 5V19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span data-i18n="generateRoomCode">生成房间码</span>
-                </button>
-                <button class="btn-copy" onclick="copyToClipboard('roomCode')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V7L16 4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 2V6H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span data-i18n="copy">复制</span>
-                </button>
-            </div>
-        </div>
-        <div class="input-group">
-            <label data-i18n="inputRoomCode">3. 输入房间码（用于解密）</label>
-            <div class="input-row">
-                <input type="text" id="inputRoomCode" placeholder="请输入对方分享的房间码..." data-i18n="inputRoomCodePlaceholder">
-                <button class="btn-paste" onclick="pasteFromClipboard('inputRoomCode')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16L21 8V19C21 20.1046 20.1046 21 19 21Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M17 21V13H7V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M7 3V8H15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span data-i18n="paste">粘贴</span>
-                </button>
-            </div>
-        </div>
-        <div class="btn-group">
-            <button class="btn-encrypt" onclick="encryptData()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 15V12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 8H12.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span data-i18n="encrypt">加密</span>
-            </button>
-            <button class="btn-decrypt" onclick="decryptData()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 9V12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 16H12.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span data-i18n="decrypt">解密</span>
-            </button>
-        </div>
-        <div class="result-group" id="encryptGroup">
-            <label data-i18n="encryptResult">加密结果</label>
-            <div class="input-row">
-                <textarea id="encryptResult" readonly placeholder="加密后的内容将显示在这里..." data-i18n="encryptResultPlaceholder"></textarea>
-                <button class="btn-copy" onclick="copyToClipboard('encryptResult')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V7L16 4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 2V6H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span data-i18n="copy">复制</span>
-                </button>
-            </div>
-        </div>
-        <div class="result-group" id="decryptGroup">
-            <label data-i18n="decryptResult">解密结果</label>
-            <div class="input-row">
-                <textarea id="decryptResult" readonly placeholder="解密后的内容将显示在这里..." data-i18n="decryptResultPlaceholder"></textarea>
-                <button class="btn-copy" onclick="copyToClipboard('decryptResult')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V7L16 4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 2V6H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span data-i18n="copy">复制</span>
-                </button>
-            </div>
-        </div>
-        <div class="tip" data-i18n="tip">
-            🔒 提示：房间码包含加密密钥，请勿泄露给无关人员 | 加密采用AES-128-CBC算法，安全可靠 | 所有操作均在本地完成，数据不会上传服务器
-        </div>
-    </div>
-    <div class="copy-toast" id="copyToast" data-i18n="copySuccess">复制成功！</div>
-    <script src="https://cdn.jsdelivr.net/gh/SqmProMax/AES-Locker@main/script.js"></script>
-</body>
-</html>
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+    transform: translateY(-1px);
+}
+textarea {
+    resize: none;
+    height: 120px;
+    line-height: 1.6;
+}
+button {
+    padding: 15px 24px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+button::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease-out, height 0.6s ease-out;
+}
+button:hover::after {
+    width: 300px;
+    height: 300px;
+}
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-paste {
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+}
+.btn-generate {
+    background: linear-gradient(90deg, #3498db, #2980b9);
+}
+.btn-copy {
+    background: linear-gradient(90deg, #9b59b6, #8e44ad);
+}
+.btn-encrypt {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    width: 140px;
+}
+.btn-decrypt {
+    background: linear-gradient(90deg, #f39c12, #d35400);
+    width: 140px;
+}
+.btn-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px 0;
+}
+.result-group {
+    margin-top: 35px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s forwards;
+}
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.copy-toast {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: rgba(46, 204, 113, 0.9);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999;
+}
+.copy-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.loading {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 25px;
+    }
+    .input-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    button {
+        width: 100%;
+        padding: 14px;
+    }
+    .btn-group {
+        flex-direction: column;
+    }
+    .btn-encrypt, .btn-decrypt {
+        width: 100%;
+    }
+}

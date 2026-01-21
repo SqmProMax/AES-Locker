@@ -220,7 +220,6 @@ const translations = {
 const AES_MODE = CryptoJS.mode.CBC;
 const AES_PADDING = CryptoJS.pad.Pkcs7;
 const copyToast = document.getElementById('copyToast');
-
 function switchLanguage(lang) {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -234,7 +233,6 @@ function switchLanguage(lang) {
     });
     document.documentElement.lang = lang;
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     const browserLang = navigator.language || navigator.userLanguage;
     const supportedLangs = Object.keys(translations);
@@ -242,7 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('languageSelect').value = initialLang;
     switchLanguage(initialLang);
 });
-
 async function pasteFromClipboard(targetId) {
     const target = document.getElementById(targetId);
     const lang = document.getElementById('languageSelect').value;
@@ -262,7 +259,6 @@ async function pasteFromClipboard(targetId) {
             : translations[lang]['inputRoomCodePlaceholder'];
     }
 }
-
 async function copyToClipboard(targetId) {
     const target = document.getElementById(targetId);
     const text = target.value;
@@ -303,7 +299,6 @@ async function copyToClipboard(targetId) {
         }
     }
 }
-
 function generateRoomCode() {
     const roomCodeInput = document.getElementById('roomCode');
     const lang = document.getElementById('languageSelect').value;
@@ -319,7 +314,6 @@ function generateRoomCode() {
         }, 1500);
     }, 800);
 }
-
 function getKeyFromRoomCode(roomCode) {
     const lang = document.getElementById('languageSelect').value;
     if (!roomCode || !roomCode.includes('|')) {
@@ -333,7 +327,6 @@ function getKeyFromRoomCode(roomCode) {
     }
     return key;
 }
-
 function encryptData() {
     const plainText = document.getElementById('plainText').value;
     const roomCode = document.getElementById('roomCode').value;
@@ -362,6 +355,7 @@ function encryptData() {
             CryptoJS.enc.Hex.parse(key),
             { iv: iv, mode: AES_MODE, padding: AES_PADDING }
         );
+        // 只使用Base64编码，不再做二次压缩
         const ivB64 = iv.toString(CryptoJS.enc.Base64);
         const cipherB64 = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
         const result = `${ivB64}|${cipherB64}`;
@@ -373,7 +367,6 @@ function encryptData() {
         }, 1500);
     }, 1000);
 }
-
 function decryptData() {
     const encryptText = document.getElementById('encryptResult').value;
     const roomCode = document.getElementById('inputRoomCode').value;
@@ -401,6 +394,7 @@ function decryptData() {
     decryptGroup.style.opacity = "0.7";
     setTimeout(() => {
         const [ivB64, cipherB64] = encryptText.split('|');
+        // 直接Base64解码，不再需要解压缩
         const iv = CryptoJS.enc.Base64.parse(ivB64);
         const ciphertext = CryptoJS.enc.Base64.parse(cipherB64);
         try {
@@ -427,7 +421,6 @@ function decryptData() {
         }
     }, 1000);
 }
-
 window.onload = function() {
     const container = document.querySelector('.container');
     container.style.opacity = "0";
