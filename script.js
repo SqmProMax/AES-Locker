@@ -1,6 +1,6 @@
 const translations = {
     "zh-CN": {
-        "title": "✨ AES 加密锁",
+        "title": "AES 加密锁",
         "inputContent": "1. 待处理内容（明文/密文）",
         "inputContentPlaceholder": "请输入明文（加密）或密文（解密）...",
         "paste": "粘贴",
@@ -62,7 +62,7 @@ const translations = {
         "decryptFailed": "❌ 解密失敗！可能是房間碼錯誤或密文被竄改"
     },
     "en-US": {
-        "title": "✨ AES Locker",
+        "title": "AES Locker",
         "inputContent": "1. Content to Process (Plaintext/Ciphertext)",
         "inputContentPlaceholder": "Enter plaintext (encrypt) or ciphertext (decrypt)...",
         "paste": "Paste",
@@ -93,7 +93,7 @@ const translations = {
         "decryptFailed": "❌ Decryption failed! Possible wrong room code or tampered ciphertext"
     },
     "en-GB": {
-        "title": "✨ AESLocker",
+        "title": "AESLocker",
         "inputContent": "1. Content to Process (Plaintext/Ciphertext)",
         "inputContentPlaceholder": "Enter plaintext (encrypt) or ciphertext (decrypt)...",
         "paste": "Paste",
@@ -124,7 +124,7 @@ const translations = {
         "decryptFailed": "❌ Decryption failed! Possible wrong room code or tampered ciphertext"
     },
     "es": {
-        "title": "✨ Candado AES",
+        "title": "Candado AES",
         "inputContent": "1. Contenido a Procesar (Texto Plano/Cifrado)",
         "inputContentPlaceholder": "Ingrese texto plano (cifrar) o texto cifrado (descifrar)...",
         "paste": "Pegar",
@@ -155,7 +155,7 @@ const translations = {
         "decryptFailed": "❌ Error al descifrar! Posible código de sala incorrecto o texto cifrado alterado"
     },
     "ru": {
-        "title": "✨ Шифр AES (Shifr AES)",
+        "title": "Шифр AES (Shifr AES)",
         "inputContent": "1. Содержимое для обработки (открытый текст/шифртекст)",
         "inputContentPlaceholder": "Введите открытый текст (шифрование) или шифртекст (дешифрование)...",
         "paste": "Вставить",
@@ -186,7 +186,7 @@ const translations = {
         "decryptFailed": "❌ Ошибка дешифрования! Возможно, неверный код комнаты или измененный шифртекст"
     },
     "de": {
-        "title": "✨ AES-Schloss",
+        "title": "AES-Schloss",
         "inputContent": "1. Zu verarbeitender Inhalt (Klartext/Chiffretext)",
         "inputContentPlaceholder": "Geben Sie Klartext (Verschlüsseln) oder Chiffretext (Entschlüsseln) ein...",
         "paste": "Einfügen",
